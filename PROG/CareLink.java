@@ -90,6 +90,8 @@ public class CareLink{
 				System.out.print("Contraseña : ");
 				password = src.nextLine();
 
+				// COMPROBACION DE SI CORREO Y CONTRASEÑA COINCIDE CON EL USUARIO
+
 				try(Connection conn = DriverManager.getConnection("jdbc:mariadb://localhost:3306/CareLink", "1DAM", "1DAM")){
 				
 				    // SENTENCIA SQL PARA INSERTAR PARAMETROS
@@ -103,6 +105,8 @@ public class CareLink{
 				   	stmt.setString(3, password);
 
 		    		ResultSet rs = stmt.executeQuery();
+
+		    		// RECOGIDA DE DATOS Y CREACION DE OBJETO USUARIOS SEGUN SUS CARACTERISTICAS
 
 		    		if (rs.next()) {
 		    			int id = rs.getInt("id");
@@ -165,7 +169,7 @@ public class CareLink{
             edad = src.nextInt();
             src.nextLine();
 
-            // Validar edad
+            // VALIDAR EDAD
             if (edad < 18 || edad > 120) {
                 System.out.println(" Edad no válida. Debe estar entre 18 y 120 años.");
                 continue;
@@ -174,7 +178,7 @@ public class CareLink{
             System.out.print("Introduce Correo Electrónico: ");
             correo = src.nextLine();
 
-            // Validar correo
+            // VALIDAR CORREO
             if (!correo.toLowerCase().endsWith("@gmail.com")) {
                 System.out.println(" Correo inválido. Debe ser una cuenta @gmail.com.");
                 continue;
@@ -207,6 +211,8 @@ public class CareLink{
                 especialidad = src.nextLine();
             }
 
+            // INTRODUCCION DE NUEVO USUARIO A LA BD
+
             try (Connection conn = DriverManager.getConnection("jdbc:mariadb://localhost:3306/CareLink", "1DAM", "1DAM")) {
 
                 String checkSql = "SELECT COUNT(*) FROM usuarios WHERE email = ?";
@@ -216,10 +222,14 @@ public class CareLink{
                 rs.next();
                 int count = rs.getInt(1);
 
+                // COMPROBACION DE SI EL USUARIO YA ESTA REGISTRADO
+
                 if (count > 0) {
                     System.out.println(" Ya existe un usuario con ese correo electrónico.");
                     continue;
                 }
+
+                // REGISTRO
 
                 String sql = "INSERT INTO usuarios (nombre, edad, email, password, plan, tipo_usuario, especialidad) VALUES (?, ?, ?, ?, ?, ?, ?)";
                 PreparedStatement stmt = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
@@ -324,6 +334,8 @@ class Medico extends Usuario{
 		return false;
 	}
 
+	// MENU DE ACTIVIDADES
+
 	public void Actividades(Scanner src){
 		int op1;
 		int id_paciente;
@@ -388,6 +400,8 @@ class Medico extends Usuario{
 	        e.printStackTrace();
 	    }
 	}
+
+	// FUNCION QUE PIDE EL CORREO E IDENTIFICA AL USUARIO
 
 	public int identificaUsr(Scanner src){
 		String emailPac;
@@ -744,6 +758,8 @@ class Paciente extends Usuario{
 		return false;
 	}
 
+	// LLAMADA A FAMILIAR SIMULADA CON REGISTRO DE LA LLAMADA
+
 	public void llamaFamilia() {
 		
 	    System.out.println("\n- Llamando a Familiar");
@@ -753,12 +769,13 @@ class Paciente extends Usuario{
 	        System.out.println("\n      (---)\n");
 	        Thread.sleep(1000);
 	        System.out.println("- Llamada Fallida\n");
+   	        Thread.sleep(1000);
 
 	        try (Connection conn = DriverManager.getConnection(
 	                "jdbc:mariadb://localhost:3306/CareLink", "1DAM", "1DAM")) {
 
 	            // Registrar llamada fallida
-	            String sqlInsert = "INSERT INTO llamadas (emisor_id, receptor_id, fecha, duracion, tipo) VALUES (?, ?, NOW(), ?, ?)";
+	            String sqlInsert = "INSERT INTO llamadas (emisor_id, receptor_nombre, fecha, duracion, tipo) VALUES (?, ?, NOW(), ?, ?)";
 	            PreparedStatement stmtInsert = conn.prepareStatement(sqlInsert);
 
 	            stmtInsert.setInt(1, this.id);
@@ -770,7 +787,7 @@ class Paciente extends Usuario{
 	            // Mostrar historial de llamadas
 	            System.out.println("\n--- Historial de Llamadas ---\n");
 
-	            String sqlSelect = "SELECT id, emisor_id, receptor_id, fecha, duracion, tipo FROM llamadas WHERE emisor_id = ? ORDER BY fecha DESC";
+	            String sqlSelect = "SELECT id, emisor_id, receptor_nombre, fecha, duracion, tipo FROM llamadas WHERE emisor_id = ? ORDER BY fecha DESC";
 	            PreparedStatement stmtSelect = conn.prepareStatement(sqlSelect);
 	            stmtSelect.setInt(1, this.id);
 
@@ -779,14 +796,14 @@ class Paciente extends Usuario{
 	            while (rs.next()) {
 	                int idLlamada = rs.getInt("id");
 	                int emisor = rs.getInt("emisor_id");
-	                int receptor = rs.getInt("receptor_id");
+	                int receptor = rs.getInt("receptor_nombre");
 	                String fecha = rs.getString("fecha");
 	                int duracion = rs.getInt("duracion");
 	                String tipo = rs.getString("tipo");
 
 	                System.out.println("ID Llamada: " + idLlamada);
 	                System.out.println("Emisor ID: " + emisor);
-	                System.out.println("Receptor ID: " + receptor);
+	                System.out.println("Receptor Nombre: " + receptor);
 	                System.out.println("Fecha: " + fecha);
 	                System.out.println("Duración: " + duracion + " segundos");
 	                System.out.println("Tipo: " + tipo);
@@ -804,25 +821,27 @@ class Paciente extends Usuario{
 	    }
 	}
 
+	// CHAT SIMULADO
+
 	public void chat() {
-    System.out.println("\n╔════════════════════════════════════════════╗");
-    System.out.println("║         Chat con Juan (Amigo)              ║");
-    System.out.println("╚════════════════════════════════════════════╝");
+	    System.out.println("\n╔════════════════════════════════════════════╗");
+	    System.out.println("║         Chat con Juan (Amigo)              ║");
+	    System.out.println("╚════════════════════════════════════════════╝");
 
-    System.out.println("\n[Yo]                                      [Juan]");
+	    System.out.println("\n[Yo]                                      [Juan]");
 
-    try {
-        Thread.sleep(1000);
-        System.out.println("\n✔️✔️ Enviado: ¿Cómo estás, Juan?");
-        Thread.sleep(1000);
-        System.out.println("                                (escribiendo...)");
-        Thread.sleep(1000);
-        System.out.println("\n╔════════════════════════════════════════════╗");
-        System.out.println("║           Fin del chat simulado            ║");
-        System.out.println("╚════════════════════════════════════════════╝\n");
-    } catch (InterruptedException e) {
-        System.err.println("Error al simular el chat.");
-    }
+	    try {
+	        Thread.sleep(1000);
+	        System.out.println("\n✔️✔️ Enviado: ¿Cómo estás, Juan?");
+	        Thread.sleep(1000);
+	        System.out.println("                                (escribiendo...)");
+	        Thread.sleep(1000);
+	        System.out.println("\n╔════════════════════════════════════════════╗");
+	        System.out.println("║           Fin del chat simulado            ║");
+	        System.out.println("╚════════════════════════════════════════════╝\n");
+	    } catch (InterruptedException e) {
+	        System.err.println("Error al simular el chat.");
+	    }
 	}
 
 	public void informacionSalud() {
