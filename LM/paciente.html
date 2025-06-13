@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>CareLink - Menú Paciente</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="paciente">
+  <div class="topbar">
+    <div class="left">
+      <img src="https://flagcdn.com/es.svg" alt="Español" id="lang-es" class="flag">
+      <img src="https://flagcdn.com/gb.svg" alt="English" id="lang-en" class="flag">
+    </div>
+    <div class="right">
+      <button id="call-btn">Llamar</button>
+      <button id="chat-btn">Chatear</button>
+      <button id="logout-btn">Cerrar sesión</button>
+    </div>
+  </div>
+
+  <div class="menu-container">
+    <h1 id="welcome-title">Bienvenido/a, Paciente</h1>
+    <ul>
+      <li><a href="#" id="tareas-link">Ver tareas asignadas</a></li>
+      <li><a href="#" id="recetas-link">Ver recetas</a></li>
+      <li><a href="#" id="historial-link">Ver historial de llamadas</a></li>
+    </ul>
+
+    <div id="tareas-content" style="display: none; margin-top: 1rem;">
+      <h3>Tareas asignadas:</h3>
+      <ul>
+        <li>Hacer ejercicio 30 minutos al día.</li>
+        <li>Medir la presión arterial por la mañana.</li>
+      </ul>
+    </div>
+
+    <div id="recetas-content" style="display: none; margin-top: 1rem;">
+      <h3>Recetas activas:</h3>
+      <ul>
+        <li>Amoxicilina 500mg - 3 veces al día.</li>
+        <li>Ibuprofeno 400mg - cada 8 horas (si es necesario).</li>
+      </ul>
+    </div>
+
+    <div id="historial-content" style="display: none; margin-top: 1rem;">
+      <h3>Historial de llamadas:</h3>
+      <ul>
+        <li>Llamada con Dr. García - 01/05/2025 (motivo: consulta de seguimiento).</li>
+        <li>Llamada con enfermera Ana - 15/04/2025 (motivo: recordatorio de medicación).</li>
+      </ul>
+    </div>
+
+  </div>
+
+  <script>
+    const translations = {
+      es: {
+        title: "Bienvenido/a, Paciente",
+        tareasLink: "Ver tareas asignadas",
+        recetasLink: "Ver recetas",
+        historialLink: "Ver historial de llamadas",
+        logout: "Cerrar sesión",
+        call: "Llamar",
+        chat: "Chatear",
+        tareasTitle: "Tareas asignadas:",
+        tareas1: "Hacer ejercicio 30 minutos al día.",
+        tareas2: "Medir la presión arterial por la mañana.",
+        recetasTitle: "Recetas activas:",
+        recetas1: "Amoxicilina 500mg - 3 veces al día.",
+        recetas2: "Ibuprofeno 400mg - cada 8 horas (si es necesario).",
+        historialTitle: "Historial de llamadas:",
+        historial1: "Llamada con Dr. García - 01/05/2025 (motivo: consulta de seguimiento).",
+        historial2: "Llamada con enfermera Ana - 15/04/2025 (motivo: recordatorio de medicación)."
+      },
+      en: {
+        title: "Welcome, Patient",
+        tareasLink: "View assigned tasks",
+        recetasLink: "View prescriptions",
+        historialLink: "View call history",
+        logout: "Logout",
+        call: "Call",
+        chat: "Chat",
+        tareasTitle: "Assigned tasks:",
+        tareas1: "Exercise 30 minutes daily.",
+        tareas2: "Measure blood pressure in the morning.",
+        recetasTitle: "Active prescriptions:",
+        recetas1: "Amoxicillin 500mg - 3 times a day.",
+        recetas2: "Ibuprofen 400mg - every 8 hours (if needed).",
+        historialTitle: "Call history:",
+        historial1: "Call with Dr. Garcia - 05/01/2025 (reason: follow-up consultation).",
+        historial2: "Call with Nurse Ana - 04/15/2025 (reason: medication reminder)."
+      }
+    };
+
+    let currentLang = 'es'; // Idioma por defecto
+
+    function applyTranslations() {
+      document.getElementById('welcome-title').innerText = translations[currentLang].title;
+      document.getElementById('tareas-link').innerText = translations[currentLang].tareasLink;
+      document.getElementById('recetas-link').innerText = translations[currentLang].recetasLink;
+      document.getElementById('historial-link').innerText = translations[currentLang].historialLink;
+      document.getElementById('logout-btn').innerText = translations[currentLang].logout;
+      document.getElementById('call-btn').innerText = translations[currentLang].call;
+      document.getElementById('chat-btn').innerText = translations[currentLang].chat;
+
+      // Traducir el contenido de los divs si están visibles o para cuando se hagan visibles
+      if (document.getElementById('tareas-content').style.display !== 'none') {
+        document.querySelector('#tareas-content h3').innerText = translations[currentLang].tareasTitle;
+        document.querySelector('#tareas-content ul li:nth-child(1)').innerText = translations[currentLang].tareas1;
+        document.querySelector('#tareas-content ul li:nth-child(2)').innerText = translations[currentLang].tareas2;
+      }
+      if (document.getElementById('recetas-content').style.display !== 'none') {
+        document.querySelector('#recetas-content h3').innerText = translations[currentLang].recetasTitle;
+        document.querySelector('#recetas-content ul li:nth-child(1)').innerText = translations[currentLang].recetas1;
+        document.querySelector('#recetas-content ul li:nth-child(2)').innerText = translations[currentLang].recetas2;
+      }
+      if (document.getElementById('historial-content').style.display !== 'none') {
+        document.querySelector('#historial-content h3').innerText = translations[currentLang].historialTitle;
+        document.querySelector('#historial-content ul li:nth-child(1)').innerText = translations[currentLang].historial1;
+        document.querySelector('#historial-content ul li:nth-child(2)').innerText = translations[currentLang].historial2;
+      }
+    }
+
+    // Función para ocultar todos los contenidos de menú
+    function hideAllMenuContents() {
+      document.getElementById('tareas-content').style.display = 'none';
+      document.getElementById('recetas-content').style.display = 'none';
+      document.getElementById('historial-content').style.display = 'none';
+    }
+
+    // Event listener para el idioma español
+    document.getElementById('lang-es').addEventListener('click', () => {
+      currentLang = 'es';
+      applyTranslations();
+    });
+
+    // Event listener para el idioma inglés
+    document.getElementById('lang-en').addEventListener('click', () => {
+      currentLang = 'en';
+      applyTranslations();
+    });
+
+    // Event listeners para mostrar/ocultar contenido del menú
+    document.getElementById('tareas-link').addEventListener('click', (event) => {
+      event.preventDefault();
+      hideAllMenuContents();
+      document.getElementById('tareas-content').style.display = 'block';
+      applyTranslations();
+    });
+
+    document.getElementById('recetas-link').addEventListener('click', (event) => {
+      event.preventDefault();
+      hideAllMenuContents();
+      document.getElementById('recetas-content').style.display = 'block';
+      applyTranslations();
+    });
+
+    document.getElementById('historial-link').addEventListener('click', (event) => {
+      event.preventDefault();
+      hideAllMenuContents();
+      document.getElementById('historial-content').style.display = 'block';
+      applyTranslations();
+    });
+
+    // Event listeners para los nuevos botones de Call y Chat (simulados)
+    document.getElementById('call-btn').addEventListener('click', () => {
+      alert(currentLang === 'es' ? 'Iniciando llamada...' : 'Initiating call...');
+    });
+
+    document.getElementById('chat-btn').addEventListener('click', () => {
+      alert(currentLang === 'es' ? 'Abriendo chat...' : 'Opening chat...');
+    });
+
+    // Lógica para el botón de cerrar sesión
+    document.getElementById('logout-btn').addEventListener('click', function() {
+      window.location.href = 'index.html';
+    });
+
+    // Aplicar las traducciones iniciales al cargar la página
+    applyTranslations();
+  </script>
+</body>
+</html>

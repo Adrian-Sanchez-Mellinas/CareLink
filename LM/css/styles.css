@@ -1,0 +1,440 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f0f2f5;
+  margin: 0;
+  min-height: 100vh; /* Asegura que el body ocupe toda la altura de la vista */
+  box-sizing: border-box; /* Buena práctica para el modelo de caja */
+}
+
+/* Estilos específicos para la página de login (index.html) */
+body.login {
+  padding-top: 0; /* Asegura que no haya padding en el body para el login */
+  box-sizing: border-box;
+}
+
+/* Contenedor principal de login que envuelve topbar y container, y centra el formulario */
+.cont1 {
+  min-height: calc(100vh - 60px); /* Ocupa el espacio restante después del topbar */
+  margin-top: 60px; /* Empuja .cont1 hacia abajo para no ocultarse bajo el topbar fijo */
+  display: flex;
+  justify-content: center; /* Centra el contenido (el formulario) verticalmente */
+  align-items: center;   /* Centra el contenido (el formulario) horizontalmente */
+  flex-direction: column; /* Apila el contenido verticalmente si hay varios elementos */
+  box-sizing: border-box;
+}
+
+/* Estilos para el contenedor del formulario (en index.html) */
+.container {
+  background-color: white;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  width: 400px;
+  margin-top: 0; /* Resetear cualquier margen superior para el centrado flex */
+}
+
+/* Estilos para los títulos h1 */
+h1 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+/* Estilos para las filas de input/select en el formulario */
+.row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.row input {
+  width: 65%;
+}
+
+.row select {
+  width: 30%;
+}
+
+/* Estilos generales para inputs, selects y botones */
+input, select, button {
+  padding: 0.5rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+/* Estilos específicos para botones principales de formulario */
+button {
+  width: 100%;
+  margin-top: 1rem;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #45a049;
+}
+
+/* Estilos para el enlace de registro */
+.registro-link {
+  text-align: center;
+  margin-top: 1rem;
+}
+
+.registro-link a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.registro-link a:hover {
+  text-decoration: underline;
+}
+
+/* Estilos para la barra superior (Topbar) */
+.topbar {
+  width: 100%;
+  background-color: #333;
+  color: white;
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: fixed; /* Mantiene la barra fija en la parte superior */
+  top: 0;
+  left: 0;
+  z-index: 1000; /* Asegura que esté por encima de otros elementos */
+  box-sizing: border-box;
+  height: 60px; /* Altura explícita para la barra superior */
+}
+
+/* Estilos para las banderas de idioma */
+.flag {
+  width: 30px;
+  height: auto;
+  margin-right: 10px;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.flag:hover {
+  transform: scale(1.1);
+}
+
+/* Estilos para los botones dentro del topbar (ej. Cerrar Sesión) */
+.topbar button {
+  font-size: 1rem;
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  background-color: #e74c3c; /* Color específico para botón de cerrar sesión */
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.topbar button:hover {
+  background-color: #c0392b;
+}
+
+/* Estilos para la página de Médico */
+body.medico {
+  min-height: calc(100vh - 60px); /* Ocupa el espacio restante después del topbar */
+  margin-top: 60px; /* Empuja el body hacia abajo para no ocultarse bajo el topbar */
+  display: flex;
+  justify-content: center; /* Centra el .menu-container verticalmente */
+  align-items: center;   /* Centra el .menu-container horizontalmente */
+  flex-direction: column;/* Asegura que el .menu-container se apile */
+  padding: 0; /* Elimina el padding que podía interferir con el centrado */
+  box-sizing: border-box;
+}
+
+body.medico .menu-container {
+  background-color: white;
+  padding: 2rem;
+  border-radius: 12px;
+  max-width: 600px;
+  /* margin: auto; ya no es necesario aquí, lo centra el padre flex */
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+body.medico h1 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+body.medico ul {
+  list-style: none;
+  padding: 0;
+}
+
+body.medico li {
+  margin: 1rem 0;
+}
+
+body.medico a {
+  display: block;
+  padding: 1rem;
+  background-color: #007bff;
+  color: white;
+  text-decoration: none;
+  border-radius: 8px;
+  text-align: center;
+}
+
+body.medico a:hover {
+  background-color: #0056b3;
+}
+
+/* Estilos para la página de Paciente */
+body.paciente {
+  min-height: calc(100vh - 60px); /* Ocupa el espacio restante después del topbar */
+  margin-top: 60px; /* Empuja el body hacia abajo para no ocultarse bajo el topbar */
+  display: flex;
+  justify-content: center; /* Centra el .menu-container verticalmente */
+  align-items: center;   /* Centra el .menu-container horizontalmente */
+  flex-direction: column;/* Asegura que el .menu-container se apile */
+  padding: 0; /* Elimina el padding que podía interferir con el centrado */
+  box-sizing: border-box;
+}
+
+body.paciente .menu-container {
+  background-color: white;
+  padding: 2rem;
+  border-radius: 12px;
+  max-width: 600px;
+  /* margin: auto; ya no es necesario aquí, lo centra el padre flex */
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+body.paciente h1 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+body.paciente ul {
+  list-style: none;
+  padding: 0;
+}
+
+body.paciente li {
+  margin: 1rem 0;
+}
+
+body.paciente a {
+  display: block;
+  padding: 1rem;
+  background-color: #4CAF50;
+  color: white;
+  text-decoration: none;
+  border-radius: 8px;
+  text-align: center;
+}
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f0f2f5;
+  margin: 0;
+  min-height: 100vh; /* Asegura que el body ocupe toda la altura de la vista */
+  box-sizing: border-box; /* Buena práctica para el modelo de caja */
+}
+
+/* Estilos específicos para la página de login (index.html) */
+body.login {
+  padding-top: 0; /* Asegura que no haya padding en el body para el login */
+  box-sizing: border-box;
+}
+
+/* Contenedor principal de login que envuelve topbar y container, y centra el formulario */
+.cont1 {
+  min-height: calc(100vh - 60px); /* Ocupa el espacio restante después del topbar */
+  margin-top: 60px; /* Empuja .cont1 hacia abajo para no ocultarse bajo el topbar fijo */
+  display: flex;
+  justify-content: center; /* Centra el contenido (el formulario) verticalmente */
+  align-items: center;   /* Centra el contenido (el formulario) horizontalmente */
+  flex-direction: column; /* Apila el contenido verticalmente si hay varios elementos */
+  box-sizing: border-box;
+}
+
+/* Estilos para el contenedor del formulario (en index.html) */
+.container {
+  background-color: white;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  width: 400px;
+  margin-top: 20px;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.row input {
+  width: 65%;
+}
+
+.row select {
+  width: 30%;
+}
+
+input, select, button {
+  padding: 0.5rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+button {
+  width: 100%;
+  margin-top: 1rem;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #45a049;
+}
+
+.topbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: #333;
+  color: white;
+  padding: 0.5rem 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  z-index: 1000;
+  box-sizing: border-box; /* Asegura que padding no aumente el ancho total */
+}
+
+.topbar .left {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Espacio entre las banderas */
+}
+
+.topbar .right {
+  display: flex; /* Habilitar Flexbox */
+  align-items: center;
+  gap: 10px; /* Espacio entre los botones */
+}
+
+.flag {
+  width: 30px;
+  height: 20px;
+  border: 1px solid #ccc;
+  cursor: pointer;
+  vertical-align: middle;
+  transform: scale(1);
+  transition: transform 0.2s;
+}
+
+.flag:hover {
+  transform: scale(1.1);
+}
+
+/* Estilos generales para los botones dentro del topbar (se aplican a todos) */
+.topbar button {
+  font-size: 0.9rem; /* Un poco más pequeño para ahorrar espacio */
+  padding: 0.3rem 0.7rem; /* Reducir padding */
+  border-radius: 6px;
+  background-color: #007bff; /* Un color neutro para los botones de acción */
+  color: white;
+  border: none;
+  cursor: pointer;
+  white-space: nowrap; /* Evita que el texto del botón se rompa en varias líneas */
+  transition: background-color 0.3s ease;
+}
+
+/* Estilo específico para el botón de cerrar sesión si quieres que destaque */
+.topbar #logout-btn {
+  background-color: #e74c3c; /* Rojo para cerrar sesión */
+}
+
+.topbar button:hover {
+  background-color: #0056b3;
+}
+
+.topbar #logout-btn:hover {
+  background-color: #c0392b;
+}
+
+
+body.medico {
+  padding-top: 80px; /* Ajustar padding para que el contenido no se oculte bajo el topbar */
+}
+
+body.medico .menu-container {
+  background-color: white;
+  padding: 2rem;
+  border-radius: 12px;
+  max-width: 600px;
+  margin: auto;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+body.medico h1 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+body.medico ul {
+  list-style: none;
+  padding: 0;
+}
+
+body.medico li {
+  margin: 1rem 0;
+}
+
+body.medico a {
+  display: block;
+  padding: 1rem;
+  background-color: #007bff;
+  color: white;
+  text-decoration: none;
+  border-radius: 8px;
+  text-align: center;
+}
+
+body.medico a:hover {
+  background-color: #0056b3;
+}
+
+/* Estilos para la página de Paciente */
+body.paciente {
+  min-height: calc(100vh - 60px); /* Ocupa el espacio restante después del topbar */
+  margin-top: 60px; /* Empuja el body hacia abajo para no ocultarse bajo el topbar */
+  display: flex;
+  justify-content: center; /* Centra el .menu-container verticalmente */
+  align-items: center;   /* Centra el .menu-container horizontalmente */
+  flex-direction: column;/* Asegura que el .menu-container se apile */
+  padding: 0; /* Elimina el padding que podía interferir con el centrado */
+  box-sizing: border-box;
+}
+
+body.paciente .menu-container {
+  background-color: white;
+  padding: 2rem;
+  border-radius: 12px;
+  max-width: 600px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+body.paciente a:hover {
+  background-color: #45a049;
+}

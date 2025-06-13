@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>CareLink - Menú Médico</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="medico">
+  <div class="topbar">
+    <div class="left">
+      <img src="https://flagcdn.com/es.svg" alt="Español" id="lang-es" class="flag">
+      <img src="https://flagcdn.com/gb.svg" alt="English" id="lang-en" class="flag">
+    </div>
+    <div class="right">
+      <button id="call-btn">Llamar</button>
+      <button id="chat-btn">Chatear</button>
+      <button id="logout-btn">Cerrar sesión</button>
+    </div>
+  </div>
+
+  <div class="menu-container">
+    <h1>Bienvenido/a, Médico</h1>
+    <ul>
+      <li><a href="#" id="pacientes-link">Pacientes</a></li>
+      <li><a href="#" id="recetas-link">Administrar recetas</a></li>
+      <li><a href="#" id="historial-link">Administrar historial médico </a></li>
+      <li><a href="#" id="tareas-link">Administrar tareas/actividades</a></li>
+    </ul>
+
+    <div id="pacientes-content" style="display: none; margin-top: 1rem;">
+      </div>
+
+    <div id="recetas-content" style="display: none; margin-top: 1rem;">
+      </div>
+
+    <div id="historial-content" style="display: none; margin-top: 1rem;">
+      </div>
+
+    <div id="tareas-content" style="display: none; margin-top: 1rem;">
+      </div>
+
+  </div>
+
+  <script>
+    const translations = {
+      es: {
+        title: "Bienvenido/a, Médico",
+        pacientesLink: "Pacientes",
+        administrarRecetasLink: "Administrar recetas",
+        administrarHistorialLink: "Administrar historial médico",
+        administrarTareasLink: "Administrar tareas/actividades",
+        logout: "Cerrar sesión",
+        call: "Llamar",
+        chat: "Chatear",
+        promptEmail: "Ingrese el correo electrónico del paciente:",
+        pacientesTitle: "Pacientes:",
+        recetasTitle: "Recetas del paciente:",
+        historialTitle: "Historial médico del paciente:",
+        tareasTitle: "Tareas/Actividades del paciente:",
+        newBtn: "Nuevo", // Traducción del botón "Nuevo"
+        calling: "Iniciando llamada...", // Traducción de la alerta de llamada
+        chatting: "Abriendo chat...", // Traducción de la alerta de chat
+
+        // Datos de ejemplo FIJOS para Pacientes
+        samplePatients: [
+          "Juan Pérez",
+          "Carlos López",
+          "María García"
+        ],
+        // Datos de ejemplo FIJOS para Recetas (siempre los mismos 2)
+        sampleRecipes: [
+          "Ibuprofeno 600mg - 1 cada 8h (10 días)",
+          "Amoxicilina 500mg - 1 cada 12h (7 días)"
+        ],
+        // Datos de ejemplo FIJOS para Historial Médico (siempre los mismos 2)
+        sampleMedicalHistory: [
+          "Visita por resfriado común (2023-10-26)",
+          "Alergia a la penicilina (confirmada 2022-01-10)"
+        ],
+        // Datos de ejemplo FIJOS para Tareas/Actividades (siempre los mismos 2)
+        sampleTasks: [
+          "Programar cita de seguimiento en 2 semanas.",
+          "Revisar resultados de análisis de sangre."
+        ]
+      },
+      en: {
+        title: "Welcome, Doctor",
+        pacientesLink: "Patients",
+        administrarRecetasLink: "Manage Prescriptions",
+        administrarHistorialLink: "Manage Medical History",
+        administrarTareasLink: "Manage Tasks/Activities",
+        logout: "Logout",
+        call: "Call",
+        chat: "Chat",
+        promptEmail: "Enter patient's email:",
+        pacientesTitle: "Patients:",
+        recetasTitle: "Patient Prescriptions:",
+        historialTitle: "Patient Medical History:",
+        tareasTitle: "Patient Tasks/Activities:",
+        newBtn: "New", // Translation for "New" button
+        calling: "Initiating call...", // Translation for call alert
+        chatting: "Opening chat...", // Translation for chat alert
+
+        // Fixed sample data for Patients
+        samplePatients: [
+          "John Doe",
+          "Charles Smith",
+          "Mary Johnson"
+        ],
+        // Fixed sample data for Prescriptions (always the same 2)
+        sampleRecipes: [
+          "Ibuprofen 600mg - 1 every 8h (10 days)",
+          "Amoxicillin 500mg - 1 every 12h (7 days)"
+        ],
+        // Fixed sample data for Medical History (always the same 2)
+        sampleMedicalHistory: [
+          "Common cold visit (2023-10-26)",
+          "Penicillin allergy (confirmed 2022-01-10)"
+        ],
+        // Fixed sample data for Tasks/Activities (always the same 2)
+        sampleTasks: [
+          "Schedule follow-up appointment in 2 weeks.",
+          "Review blood test results."
+        ]
+      }
+    };
+
+    let currentLang = 'es'; // Idioma por defecto
+
+    // Función para aplicar todas las traducciones de la página
+    function applyTranslations() {
+      document.querySelector('.menu-container h1').innerText = translations[currentLang].title;
+      document.getElementById('pacientes-link').innerText = translations[currentLang].pacientesLink;
+      document.getElementById('recetas-link').innerText = translations[currentLang].administrarRecetasLink;
+      document.getElementById('historial-link').innerText = translations[currentLang].administrarHistorialLink;
+      document.getElementById('tareas-link').innerText = translations[currentLang].administrarTareasLink;
+      document.getElementById('logout-btn').innerText = translations[currentLang].logout;
+      document.getElementById('call-btn').innerText = translations[currentLang].call; // Traducir botón Llamar
+      document.getElementById('chat-btn').innerText = translations[currentLang].chat; // Traducir botón Chatear
+
+      // Recargar el contenido de los divs si están visibles para aplicar nuevas traducciones
+      // Esto llama a updateDynamicContent que reconstruye el HTML incluyendo el h3 y el botón
+      if (document.getElementById('pacientes-content').style.display !== 'none') {
+        updateDynamicContent('pacientes-content', 'samplePatients', 'pacientesTitle', false); // No botón "Nuevo" para Pacientes
+      }
+      if (document.getElementById('recetas-content').style.display !== 'none') {
+        updateDynamicContent('recetas-content', 'sampleRecipes', 'recetasTitle', true); // Con botón "Nuevo"
+      }
+      if (document.getElementById('historial-content').style.display !== 'none') {
+        updateDynamicContent('historial-content', 'sampleMedicalHistory', 'historialTitle', true); // Con botón "Nuevo"
+      }
+      if (document.getElementById('tareas-content').style.display !== 'none') {
+        updateDynamicContent('tareas-content', 'sampleTasks', 'tareasTitle', true); // Con botón "Nuevo"
+      }
+    }
+
+    // Función para actualizar el contenido dinámico de un div (incluyendo h3, ul y opcionalmente botón)
+    function updateDynamicContent(contentDivId, sampleDataKey, titleKey, includeNewButton = false) {
+        const contentDiv = document.getElementById(contentDivId);
+        
+        let contentHtml = `<h3>${translations[currentLang][titleKey]}</h3>`;
+        contentHtml += '<ul>';
+        translations[currentLang][sampleDataKey].forEach(item => {
+            contentHtml += `<li>${item}</li>`;
+        });
+        contentHtml += '</ul>';
+        
+        if (includeNewButton) {
+            contentHtml += `<button class="new-btn">${translations[currentLang].newBtn}</button>`;
+        }
+
+        contentDiv.innerHTML = contentHtml; // Reemplazar todo el contenido del div
+    }
+
+    // Función para ocultar todos los divs de contenido dinámico
+    function hideAllMenuContentsMedico() {
+      document.getElementById('pacientes-content').style.display = 'none';
+      document.getElementById('recetas-content').style.display = 'none';
+      document.getElementById('historial-content').style.display = 'none';
+      document.getElementById('tareas-content').style.display = 'none';
+    }
+
+    // Event listener para el idioma español
+    document.getElementById('lang-es').addEventListener('click', () => {
+      currentLang = 'es';
+      applyTranslations();
+    });
+
+    // Event listener para el idioma inglés
+    document.getElementById('lang-en').addEventListener('click', () => {
+      currentLang = 'en';
+      applyTranslations();
+    });
+
+    // --- Event listeners para mostrar/ocultar contenido del menú ---
+
+    // Pacientes: Muestra/oculta el div de contenido y carga sus ejemplos
+    document.getElementById('pacientes-link').addEventListener('click', (event) => {
+      event.preventDefault();
+      const pacientesContentDiv = document.getElementById('pacientes-content');
+      if (pacientesContentDiv.style.display === 'block') {
+        pacientesContentDiv.style.display = 'none';
+        pacientesContentDiv.innerHTML = ''; // Limpiar al ocultar
+      } else {
+        hideAllMenuContentsMedico(); // Oculta los demás antes de mostrar
+        updateDynamicContent('pacientes-content', 'samplePatients', 'pacientesTitle', false); // No botón "Nuevo"
+        pacientesContentDiv.style.display = 'block';
+      }
+    });
+
+    // Recetas, Historial, Tareas: Con prompt y carga de 2 ejemplos fijos
+    function setupMedicalSectionToggle(linkId, contentDivId, sampleDataKey, titleKey) {
+        document.getElementById(linkId).addEventListener('click', (event) => {
+            event.preventDefault();
+            const contentDiv = document.getElementById(contentDivId);
+            
+            if (contentDiv.style.display === 'block') {
+                // Si ya está visible, ocultar
+                contentDiv.style.display = 'none';
+                contentDiv.innerHTML = ''; // Limpiar completamente al ocultar
+            } else {
+                // Si está oculto, pedir el correo electrónico y mostrar el contenido
+                const correo = prompt(translations[currentLang].promptEmail);
+                
+                if (correo !== null) { // Si el usuario no cancela el prompt
+                    hideAllMenuContentsMedico(); // Oculta los demás antes de mostrar
+                    updateDynamicContent(contentDivId, sampleDataKey, titleKey, true); // Cargar el contenido fijo (h3, ul y botón)
+                    contentDiv.style.display = 'block'; // Mostrar el div
+                } else {
+                    // Si el usuario cancela el prompt, asegurarse de que el div esté oculto y vacío
+                    contentDiv.style.display = 'none';
+                    contentDiv.innerHTML = '';
+                }
+            }
+        });
+    }
+
+    setupMedicalSectionToggle('recetas-link', 'recetas-content', 'sampleRecipes', 'recetasTitle');
+    setupMedicalSectionToggle('historial-link', 'historial-content', 'sampleMedicalHistory', 'historialTitle');
+    setupMedicalSectionToggle('tareas-link', 'tareas-content', 'sampleTasks', 'tareasTitle');
+
+    // Event listeners para los botones de Call y Chat (simulados)
+    document.getElementById('call-btn').addEventListener('click', () => {
+      alert(translations[currentLang].calling);
+    });
+
+    document.getElementById('chat-btn').addEventListener('click', () => {
+      alert(translations[currentLang].chatting);
+    });
+
+    // Lógica para el botón de cerrar sesión
+    document.getElementById('logout-btn').addEventListener('click', function() {
+      window.location.href = 'index.html';
+    });
+
+    // Aplicar las traducciones iniciales al cargar la página
+    applyTranslations();
+  </script>
+
+</body>
+</html>

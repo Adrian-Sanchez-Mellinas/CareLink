@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CareLink - Inicio Sesión</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="login">
+  <div class="cont1">
+
+    <div class="topbar">
+      <div class="left">
+        <img src="https://flagcdn.com/es.svg" alt="Español" id="lang-es" class="flag">
+        <img src="https://flagcdn.com/gb.svg" alt="English" id="lang-en" class="flag">
+      </div>
+      <div class="right">
+        </div>
+    </div>
+
+    <div class="container">
+
+      <h1>CareLink</h1>
+
+      <form id="login-form">
+        <h2>Iniciar Sesión</h2>
+        <span id="label-nombre-login">Nombre:</span>
+        <input type="text" id="nombre" placeholder="Nombre" required><br>
+        <span id="label-contrasena-login">Contraseña:</span>
+        <input type="password" id="contraseña" placeholder="Contraseña" required><br>
+
+        <label for="rol" id="label-soy-login">Soy:</label>
+        <select id="rol">
+          <option value="paciente">Paciente</option>
+          <option value="medico">Médico</option>
+        </select><br>
+
+        <button type="submit">Entrar</button>
+        <p id="no-account-text">¿No tienes cuenta? <a href="#" onclick="mostrarRegistro()">Regístrate</a></p>
+      </form>
+
+      <form id="registro-form" style="display: none;">
+        <h2>Registro</h2>
+        <span id="label-nombre-reg">Nombre:</span><input type="text" id="reg-nombre" placeholder="Nombre" required><br>
+        <span id="label-contrasena-reg">Contraseña:</span><input type="password" id="reg-contraseña" placeholder="Contraseña" required><br>
+        <span id="label-edad-reg">Edad:</span><input type="number" id="reg-edad" placeholder="Edad" required><br>
+        <span id="label-email-reg">Email:</span><input type="email" id="reg-email" placeholder="Email" required><br>
+        <span id="label-plan-reg">Plan:</span><select id="reg-plan">
+          <option value="GRATIS">Gratis</option>
+          <option value="PREMIUM">Premium</option>
+        </select><br>
+        <label for="reg-rol" id="label-soy-reg">Soy:</label>
+        <select id="reg-rol">
+          <option value="USUARIO">Paciente</option>
+          <option value="MEDICO">Médico</option>
+        </select><br>
+        <input type="text" id="reg-especialidad" placeholder="Especialidad (solo médicos)" style="display: none;"><br>
+        <button type="submit">Registrarme</button>
+        <p id="already-account-text">¿Ya tienes cuenta? <a href="#" onclick="mostrarLogin()">Inicia sesión</a></p>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const translations = {
+      es: {
+        title: "CareLink",
+        loginTitle: "Iniciar Sesión",
+        loginButton: "Entrar",
+        iamLabel: "Soy:",
+        noAccount: "<span>¿No tienes cuenta?</span> <a href=\"#\" onclick=\"mostrarRegistro()\">Regístrate</a>",
+        registerTitle: "Registro",
+        registerButton: "Registrarme",
+        alreadyAccount: "<span>¿Ya tienes cuenta?</span> <a href=\"#\" onclick=\"mostrarLogin()\">Inicia sesión</a>",
+        // Textos literales de las etiquetas
+        labelTextName: "Nombre:",
+        labelTextPassword: "Contraseña:",
+        labelTextAge: "Edad:",
+        labelTextEmail: "Email:",
+        labelTextPlan: "Plan:",
+        // Placeholders (texto dentro de los campos)
+        placeholderName: "Nombre",
+        placeholderPassword: "Contraseña",
+        placeholderAge: "Edad",
+        placeholderEmail: "Email",
+        placeholderSpecialty: "Especialidad (solo médicos)"
+      },
+      en: {
+        title: "CareLink",
+        loginTitle: "Login",
+        loginButton: "Enter",
+        iamLabel: "I am:",
+        noAccount: "<span>Don't have an account?</span> <a href=\"#\" onclick=\"mostrarRegistro()\">Register</a>",
+        registerTitle: "Register",
+        registerButton: "Register Me",
+        alreadyAccount: "<span>Already have an account?</span> <a href=\"#\" onclick=\"mostrarLogin()\">Log in</a>",
+        // Textos literales de las etiquetas
+        labelTextName: "Name:",
+        labelTextPassword: "Password:",
+        labelTextAge: "Age:",
+        labelTextEmail: "Email:",
+        labelTextPlan: "Plan:",
+        // Placeholders (texto dentro de los campos)
+        placeholderName: "Name",
+        placeholderPassword: "Password",
+        placeholderAge: "Age",
+        placeholderEmail: "Email",
+        placeholderSpecialty: "Specialty (doctors only)"
+      }
+    };
+
+    let currentLang = 'es'; // Idioma por defecto
+
+    function traducirPagina() {
+      // Traducción de elementos de login
+      document.querySelector("h1").innerText = translations[currentLang].title;
+      document.querySelector("#login-form h2").innerText = translations[currentLang].loginTitle;
+
+      document.getElementById("label-nombre-login").innerText = translations[currentLang].labelTextName; // Nuevo
+      document.getElementById("nombre").setAttribute("placeholder", translations[currentLang].placeholderName);
+
+      document.getElementById("label-contrasena-login").innerText = translations[currentLang].labelTextPassword; // Nuevo
+      document.getElementById("contraseña").setAttribute("placeholder", translations[currentLang].placeholderPassword);
+
+      document.getElementById("label-soy-login").innerText = translations[currentLang].iamLabel; // Ahora con ID
+      document.querySelector("#login-form button").innerText = translations[currentLang].loginButton;
+      document.getElementById("no-account-text").innerHTML = translations[currentLang].noAccount; // Ahora con ID
+
+      // Traducción de elementos de registro
+      document.querySelector("#registro-form h2").innerText = translations[currentLang].registerTitle;
+
+      document.getElementById("label-nombre-reg").innerText = translations[currentLang].labelTextName; // Nuevo
+      document.getElementById("reg-nombre").setAttribute("placeholder", translations[currentLang].placeholderName);
+
+      document.getElementById("label-contrasena-reg").innerText = translations[currentLang].labelTextPassword; // Nuevo
+      document.getElementById("reg-contraseña").setAttribute("placeholder", translations[currentLang].placeholderPassword);
+
+      document.getElementById("label-edad-reg").innerText = translations[currentLang].labelTextAge; // Nuevo
+      document.getElementById("reg-edad").setAttribute("placeholder", translations[currentLang].placeholderAge);
+
+      document.getElementById("label-email-reg").innerText = translations[currentLang].labelTextEmail; // Nuevo
+      document.getElementById("reg-email").setAttribute("placeholder", translations[currentLang].placeholderEmail);
+
+      document.getElementById("label-plan-reg").innerText = translations[currentLang].labelTextPlan; // Nuevo
+      document.getElementById("label-soy-reg").innerText = translations[currentLang].iamLabel; // Ahora con ID
+      document.getElementById("reg-especialidad").setAttribute("placeholder", translations[currentLang].placeholderSpecialty);
+      document.querySelector("#registro-form button").innerText = translations[currentLang].registerButton;
+      document.getElementById("already-account-text").innerHTML = translations[currentLang].alreadyAccount; // Ahora con ID
+    }
+
+    function mostrarLogin() {
+      document.getElementById("registro-form").style.display = "none";
+      document.getElementById("login-form").style.display = "block";
+      traducirPagina(); // Re-aplicar traducciones al mostrar el formulario de login
+    }
+
+    function mostrarRegistro() {
+      document.getElementById("login-form").style.display = "none";
+      document.getElementById("registro-form").style.display = "block";
+      traducirPagina(); // Re-aplicar traducciones al mostrar el formulario de registro
+    }
+
+    // Event listeners para los botones de idioma
+    document.getElementById('lang-es').addEventListener('click', function() {
+      currentLang = 'es';
+      traducirPagina();
+    });
+
+    document.getElementById('lang-en').addEventListener('click', function() {
+      currentLang = 'en';
+      traducirPagina();
+    });
+
+    // Lógica para mostrar/ocultar campo de especialidad en registro
+    document.getElementById('reg-rol').addEventListener('change', function() {
+      const especialidadInput = document.getElementById('reg-especialidad');
+      if (this.value === 'MEDICO') {
+        especialidadInput.style.display = 'block';
+        especialidadInput.setAttribute('required', 'required');
+      } else {
+        especialidadInput.style.display = 'none';
+        especialidadInput.removeAttribute('required');
+      }
+      traducirPagina(); // Re-aplicar traducciones para que el placeholder de especialidad se actualice.
+    });
+
+    // Lógica para manejar el envío del formulario de registro (simulado)
+    document.getElementById('registro-form').addEventListener('submit', function(event) {
+      event.preventDefault();
+      alert(currentLang === 'es' ? 'Registro enviado (simulado)' : 'Registration submitted (simulated)');
+      // Aquí iría la lógica para enviar los datos al servidor
+    });
+
+    // Lógica para manejar el envío del formulario de login (simulado)
+    document.getElementById('login-form').addEventListener('submit', function(event) {
+      event.preventDefault();
+      const rol = document.getElementById('rol').value;
+      if (rol === 'medico') {
+        window.location.href = 'medico.html';
+      } else if (rol === 'paciente') {
+        window.location.href = 'paciente.html';
+      }
+    });
+
+    // Aplicar traducciones iniciales al cargar la página
+    traducirPagina();
+  </script>
+</body>
+</html>
