@@ -62,7 +62,7 @@ public class CareLink{
 	// FUNCION DE INICIO DE SESION
 	public static Usuario inicioSesion(Scanner src){
 
-		String nombre;
+		String correo;
 		String password;
 		int usr;
 		String rol;
@@ -84,8 +84,8 @@ public class CareLink{
 				else 
 					rol= "USUARIO";
 
-				System.out.print("Nombre : ");
-				nombre = src.nextLine();
+				System.out.print("Correo : ");
+				correo = src.nextLine();
 
 				System.out.print("Contraseña : ");
 				password = src.nextLine();
@@ -93,13 +93,13 @@ public class CareLink{
 				try(Connection conn = DriverManager.getConnection("jdbc:mariadb://localhost:3306/CareLink", "1DAM", "1DAM")){
 				
 				    // SENTENCIA SQL PARA INSERTAR PARAMETROS
-					String sql = "SELECT * FROM usuarios WHERE tipo_usuario = ? AND nombre = ? AND password = ?";
+					String sql = "SELECT * FROM usuarios WHERE tipo_usuario = ? AND email = ? AND password = ?";
 					
 				    // PREPARA LAS SENTENCIAS A INTRODUCIR 
 					PreparedStatement stmt = conn.prepareStatement(sql);
 					    
 				   	stmt.setString(1, rol);
-				   	stmt.setString(2, nombre);
+				   	stmt.setString(2, correo);
 				   	stmt.setString(3, password);
 
 		    		ResultSet rs = stmt.executeQuery();
@@ -107,17 +107,17 @@ public class CareLink{
 		    		if (rs.next()) {
 		    			int id = rs.getInt("id");
 		    			int edad = rs.getInt("edad");
-		    			String email = rs.getString("email");
+		    			String nombre = rs.getString("nombre");
 		    			String especialidad = rs.getString("especialidad");
 		    			String planStr = rs.getString("plan");
 
 		    			if ("MEDICO".equals(rol)){
 			    			System.out.println("Inicio de Sesion Correcto");
-		    				return new Medico(id,nombre,edad,email,password,especialidad);
+		    				return new Medico(id,nombre,edad,correo,password,especialidad);
 		    			}else{
 			    			System.out.println("\n----Inicio de Sesion Correcto----\n");
 		    				Paciente.Plan planEnum = Paciente.Plan.valueOf(planStr);
-		    				return new Paciente(id,nombre,edad,email,password,planEnum);
+		    				return new Paciente(id,nombre,edad,correo,password,planEnum);
 		    			}
 		    		}
 		    		else
@@ -134,110 +134,123 @@ public class CareLink{
 
 
 	// FUNCION REGISTRO DE USUARIO EN BASE DE DATOS
-	public static void registroUsuario(Scanner src){
+    public static void registroUsuario(Scanner src) {
 
-		String nombre;
-		String password;
-		int edad;
-		String correo;
-		String rol;
-		int pl;
-		String plan;
-		int usr;
-		String especialidad;
+    String nombre;
+    String password;
+    int edad;
+    String correo;
+    String rol;
+    int pl;
+    String plan;
+    int usr;
+    String especialidad;
 
-		int sl = 1;
+    int sl = 1;
 
-		while(sl!=0){
+    while (sl != 0) {
 
-			System.out.println("\nRegistro de Usuario : \n -----------------------");
-			System.out.println("1.Empezar \n0.Volver");
-			sl = src.nextInt();
-			src.nextLine();
+        System.out.println("\nRegistro de Usuario : \n -----------------------");
+        System.out.println("1.Empezar \n0.Volver");
+        sl = src.nextInt();
+        src.nextLine();
 
-			if (sl == 1) {
+        if (sl == 1) {
 
-				//USUARIO INTRODUCE SUS DATOS
-				System.out.print("Introduce Nombre:");
-				nombre=src.nextLine();
+            // USUARIO INTRODUCE SUS DATOS
+            System.out.print("Introduce Nombre: ");
+            nombre = src.nextLine();
 
-				System.out.print("Introduce Edad:");
-				edad=src.nextInt();
-				src.nextLine();
+            System.out.print("Introduce Edad: ");
+            edad = src.nextInt();
+            src.nextLine();
 
-				System.out.print("Introduce Corre Elctronico:");
-				correo=src.nextLine();		
+            // Validar edad
+            if (edad < 18 || edad > 120) {
+                System.out.println(" Edad no válida. Debe estar entre 18 y 120 años.");
+                continue;
+            }
 
-				System.out.print("Introduce Contraseña:");
-				password=src.nextLine();
+            System.out.print("Introduce Correo Electrónico: ");
+            correo = src.nextLine();
 
-				System.out.println("Marque 1 - Medico o  2 - Usuario (Introduce 1 o 2)");
-				usr = src.nextInt();
-				src.nextLine();
+            // Validar correo
+            if (!correo.toLowerCase().endsWith("@gmail.com")) {
+                System.out.println(" Correo inválido. Debe ser una cuenta @gmail.com.");
+                continue;
+            }
 
-				//SI ES USUARIO COMUN SE ASIGNA UN PLAN
-				if (usr == 2){
-					
-					rol = "USUARIO";
-					especialidad = null;
-					
-					System.out.println("Elige plan 1 - Gratis o  2 - Premium (Introduce 1 o 2 )");
-					pl = src.nextInt();
-					src.nextLine();
+            System.out.print("Introduce Contraseña: ");
+            password = src.nextLine();
 
-					if (pl == 2) {
-						plan = "PREMIUM";
-					}
-					else
-						plan = "GRATIS";
-				}
+            System.out.println("Marque 1 - Médico o 2 - Usuario (Introduce 1 o 2): ");
+            usr = src.nextInt();
+            src.nextLine();
 
-				//SI ES MEDICO SE LE ASIGNA UNA ESPECIALIDAD
-				else{
-					rol = "MEDICO";
-					plan = null;
-					System.out.print("Introduce tu especialidad: ");
-					especialidad = src.nextLine();
-				}
+            if (usr == 2) {
+                rol = "USUARIO";
+                especialidad = null;
 
-				// ESTABLECE CONEXIÓN A LA BASE DE DATOS
-				try(Connection conn = DriverManager.getConnection("jdbc:mariadb://localhost:3306/CareLink", "1DAM", "1DAM")){
-				
-				    // SENTENCIA SQL PARA INSERTAR PARAMETROS
-					String sql = "INSERT INTO usuarios (nombre, edad, email, password, plan, tipo_usuario ,especialidad) VALUES (?, ?, ?, ?, ?, ?,?)";
-					
-				    // PREPARA LAS SENTENCIAS A INTRODUCIR Y HACER QUE DEVUELVA LAS CLAVES ID GENERADAS
-					PreparedStatement stmt = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
-					    
-					//ASIGNAMOS LOS VALORES
-				   	stmt.setString(1, nombre);
-					stmt.setInt(2, edad);
-					stmt.setString(3, correo);
-					stmt.setString(4, password);
-					stmt.setString(5, plan);
-					stmt.setString(6, rol);
-					stmt.setString(7, especialidad);
+                System.out.println("Elige plan 1 - Gratis o 2 - Premium (Introduce 1 o 2): ");
+                pl = src.nextInt();
+                src.nextLine();
 
-					//HACEMOS LA INSERCION EN LA BASE DE DATOS
-		    		int filas = stmt.executeUpdate();
+                if (pl == 2) {
+                    plan = "PREMIUM";
+                } else {
+                    plan = "GRATIS";
+                }
+            } else {
+                rol = "MEDICO";
+                plan = null;
+                System.out.print("Introduce tu especialidad: ");
+                especialidad = src.nextLine();
+            }
 
-		    		if (filas > 0) {
-		    			//OBTENEMOS EL ID GENERADO
-		    			ResultSet generatedKeys = stmt.getGeneratedKeys();
-		    			if (generatedKeys.next()) {
-		    				
-		    				int idGenerado = generatedKeys.getInt(1);
-		    				System.out.println(" Usuario registrado con ID: " + idGenerado);
-		    			}
-		    		}
-				} catch(SQLException e) {
-		    		e.printStackTrace();
-				}
-			}
-			else sl = 0;
-		}
-	}
+            try (Connection conn = DriverManager.getConnection("jdbc:mariadb://localhost:3306/CareLink", "1DAM", "1DAM")) {
+
+                String checkSql = "SELECT COUNT(*) FROM usuarios WHERE email = ?";
+                PreparedStatement checkStmt = conn.prepareStatement(checkSql);
+                checkStmt.setString(1, correo);
+                ResultSet rs = checkStmt.executeQuery();
+                rs.next();
+                int count = rs.getInt(1);
+
+                if (count > 0) {
+                    System.out.println(" Ya existe un usuario con ese correo electrónico.");
+                    continue;
+                }
+
+                String sql = "INSERT INTO usuarios (nombre, edad, email, password, plan, tipo_usuario, especialidad) VALUES (?, ?, ?, ?, ?, ?, ?)";
+                PreparedStatement stmt = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
+
+                stmt.setString(1, nombre);
+                stmt.setInt(2, edad);
+                stmt.setString(3, correo);
+                stmt.setString(4, password);
+                stmt.setString(5, plan);
+                stmt.setString(6, rol);
+                stmt.setString(7, especialidad);
+
+                int filas = stmt.executeUpdate();
+
+                if (filas > 0) {
+                    ResultSet generatedKeys = stmt.getGeneratedKeys();
+                    if (generatedKeys.next()) {
+                        int idGenerado = generatedKeys.getInt(1);
+                        System.out.println(" Usuario registrado con ID: " + idGenerado);
+                    }
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        } else {
+            sl = 0;
+        }
+    }
 }
+}
+
 
 //CLASE BASE USUARIO QUE TIENE METODOS ABSTRACTOS
 abstract class Usuario{
